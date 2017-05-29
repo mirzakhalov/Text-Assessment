@@ -13,7 +13,7 @@ def main():
     analyzer = Analyzer(essay)
     
     # call the functions
-    print("Number of words: ", analyzer.word_count())
+    print 'Number of words: ' ,analyzer.word_count()
     analyzer.number_of_sentences()
     analyzer.tagging()
     

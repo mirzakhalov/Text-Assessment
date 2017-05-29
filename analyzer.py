@@ -29,7 +29,7 @@ class Analyzer():
             if character[0].isupper() and switch == 1:
                 count = count + 1
                 switch = 0
-        print("Number of sentences: ", count)
+        print "Number of sentences: ", count
     
     
     def tagging(self):
@@ -47,8 +47,8 @@ class Analyzer():
             if printed[i][1] == "NN" or printed[i][1] == "NNS" or printed[i][1] == "NNP" :
                 noun_count = noun_count + 1
         #print(printed)
-        print("Number of adjectives: ", adjective_count) 
-        print("Number of nouns: ", noun_count)
-        print("Number of verbs: ", verb_count)
+        print "Number of adjectives: ", adjective_count 
+        print "Number of nouns: ", noun_count
+        print "Number of verbs: ", verb_count
         
         
