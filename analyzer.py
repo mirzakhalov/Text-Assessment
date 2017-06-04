@@ -2,6 +2,7 @@ import nltk
 from nltk.tokenize import TweetTokenizer
 import string
 
+
 class Analyzer():
   
        
@@ -29,26 +30,115 @@ class Analyzer():
             if character[0].isupper() and switch == 1:
                 count = count + 1
                 switch = 0
-        print "Number of sentences: ", count
+        return count
+        
+    def complex_words(self):
+        count = 0
+        tokenizer = nltk.tokenize.TweetTokenizer()
+        tokens = tokenizer.tokenize(self.essay)
+        
+        for token in tokens:        # as pointed out in many algorithms of readability, complex word is a word consisting of more than 2 letters
+            if len(token) > 2:
+                count = count + 1
+        return count
     
-    
-    def tagging(self):
+    def syllables(self):
         text = nltk.tokenize.word_tokenize(self.essay)
-        printed = nltk.pos_tag(text)        # this is the most powerful function of my whole code. It analyzes the sentence into grammatical parts.
-        adjective_count = 0
-        noun_count = 0
-        verb_count = 0
+        vowels = 'aeiouyAEIO'               # Apparently, counting the syllables is not only about counting the vowels
+        dth = 'uioy'                        # Additionally, we have to take into consideration sequential vowels, silent vowels
+        count = 0                           
+        total_count = 0
+        max_count = 0
+        for word in text:
+            for i in range(len(word)):
+                if word[i] in vowels:
+                    count = count + 1
+                if word[i] == 'e' and word[i] == word[len(word)-1]:
+                    count = count - 1
+                if word[i] == 'y' and word[i] == word[0]:
+                    count = count - 1
+                if word[i] == 'o' and i < (len(word)-1):
+                    if word[i+1] in dth:
+                        count = count - 1
+            total_count += count
+            if count > max_count:
+                string = word
+                max_count = count
+            count = 0
+        #print(string)  if uncommented this line will print the word with the most syllables
+        return total_count
+
+    def number_of_characters(self):
+        text = nltk.tokenize.word_tokenize(self.essay)
+        count = 0
+        for word in text:
+            for symbol in word:
+                if symbol not in string.punctuation:
+                    count += 1
+        return count
         
+    def unique_word_count(self): #calculating the number of unique words
+        text = nltk.tokenize.word_tokenize(self.essay)
+        count = 0
+        array = []
+        for word in text:
+            if word in string.punctuation:  # making sure words are not punctuation marks
+                continue
+            else:
+                if word not in array:   # making sure they are not repeated
+                    array.append(word) 
+                    count = count + 1
+        return count
+        
+    def deep_analysis(self):
+        text = nltk.tokenize.word_tokenize(self.essay)          # Not sure what they mean?
+        tagged = nltk.pos_tag(text)                             # Please read NLTK POS tagging documentation here: http://www.nltk.org/book/ch05.html                            
+        adjectives = ('JJ', 'JJR', 'JJS')
+        adverbs = ('RB', 'RBR', 'RBS', 'WHB')
+        verbs = ('VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ')
+        nouns = ('NN', 'NNS', 'NNP', 'NNPS')
+        pronouns = ('PRP', 'PRP$', 'WP', 'WP$')
+        determiners = ('DT', 'PDT', 'WDT')
+        conjunctions = ('CC')
+        interjections = ('UH')
+        qualifiers = ('CD', 'EX','POS')
+        prepositions = ('IN', 'TO')
+        adjective, adverb, verb, noun, pronoun, determiner, conjuction, interjection, qualifier, preposition, unrecognized = 0,0,0,0,0,0,0,0,0,0,0
+        total_words = self.word_count() * 1.0 
         for i in range(self.word_count()):
-            if printed[i][1] == "JJ":
-                adjective_count = adjective_count + 1
-            if printed[i][1] == "VBN" or printed[i][1] == "VB":
-                verb_count = verb_count + 1
-            if printed[i][1] == "NN" or printed[i][1] == "NNS" or printed[i][1] == "NNP" :
-                noun_count = noun_count + 1
-        #print(printed)
-        print "Number of adjectives: ", adjective_count 
-        print "Number of nouns: ", noun_count
-        print "Number of verbs: ", verb_count
-        
+            if tagged[i][1] in string.punctuation:
+                continue
+            elif tagged[i][1] in adjectives:
+                adjective += 1
+            elif tagged[i][1] in nouns:
+                noun += 1
+            elif tagged[i][1] in adverbs:
+                adverb += 1
+            elif tagged[i][1] in verbs:
+                verb += 1
+            elif tagged[i][1] in pronouns:
+                pronoun += 1
+            elif tagged[i][1] in determiners:
+                determiner += 1
+            elif tagged[i][1] in conjunctions:
+                conjuction += 1
+            elif tagged[i][1] in interjections:
+                interjection += 1
+            elif tagged[i][1] in prepositions:
+                preposition += 1
+            elif tagged[i][1] in qualifiers:
+                qualifier += 1
+            else:
+                unrecognized += 1
+        print 'Adjectives: ', "{0:.2f}".format((adjective/total_words)*100.0), '%'
+        print 'Adverbs: ', "{0:.2f}".format((adverb/total_words)*100.0), '%'
+        print 'Nouns: ', "{0:.2f}".format((noun/total_words)*100.0), '%'
+        print 'Verbs: ', "{0:.2f}".format((verb/total_words)*100.0), '%'
+        print 'Pronouns: ', "{0:.2f}".format((pronoun/total_words)*100.0), '%'
+        print 'Conjunctions: ', "{0:.2f}".format((conjuction/total_words)*100.0), '%'
+        print 'Determiners: ', "{0:.2f}".format((determiner/total_words)*100.0), '%'
+        print 'Prepositions: ', "{0:.2f}".format((preposition/total_words)*100.0), '%'
+        print 'Qualifiers: ', "{0:.2f}".format((qualifier/total_words)*100.0), '%'
+        print 'Interjections: ', "{0:.2f}".format((interjection/total_words)*100.0), '%'
+        print 'Unrecognized: ', "{0:.2f}".format((unrecognized/total_words)*100.0), '%'
         
