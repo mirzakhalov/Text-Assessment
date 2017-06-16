@@ -2,7 +2,7 @@ import sys
 import nltk
 import os
 from analyzer import Analyzer
- 
+import grammar_check
 
 def main():
      
@@ -12,6 +12,7 @@ def main():
         sys.exit("Could not find the path")
     # instantiate the object    
     analyzer = Analyzer(essay)
+   
     
     # call the functions
     print 'Number of words: ' , (analyzer.word_count())
@@ -26,5 +27,6 @@ def main():
     print 'Words per sentence: ', "{0:.2f}".format( analyzer.word_count()/ (analyzer.number_of_sentences()*1.0))
     print '              DEEP ANALYSIS(in percent)          '
     analyzer.deep_analysis()
+    #analyzer.grammar(essay)
 if __name__ == "__main__":
     main()

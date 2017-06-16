@@ -1,6 +1,7 @@
 import nltk
 from nltk.tokenize import TweetTokenizer
 import string
+import grammar_check
 
 
 class Analyzer():
@@ -11,7 +12,13 @@ class Analyzer():
         with open(essay, 'r') as text: 
             self.essay = text.read().replace('/n', '') # save the file as string into "self.essay"
         tokens = tokenizer.tokenize(self.essay) # divide the string into words(tokens) and save as a "list"git 
-    
+    def grammar(self, essay):
+        with open(essay, 'r') as text:
+            self.essay = text.read()
+        tool = grammar_check.LanguageTool('en-GB')
+        matches = tool.check(self.essay)
+        print(grammar_check.correct(self.essay, matches))
+        
     def word_count(self): # basically counts the number of tokens except the punctuation symbols
         count = 0
         tokenizer = nltk.tokenize.TweetTokenizer()
