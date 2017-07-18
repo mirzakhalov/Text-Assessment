@@ -40,7 +40,7 @@ def main():
                continue
     # twd stands for "total words detected"
     twd = count1 + count2 + count3
-    
+
     # call the functions
     print 'Number of words analyzed: ' , twd
     print 'Vocabulary level: \n' + "\tEasy: " + "{0:.2f}".format(count1*100.0/twd) + '%'

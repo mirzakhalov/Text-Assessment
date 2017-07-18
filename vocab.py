@@ -2,6 +2,7 @@ import sys, nltk, os, string
 from nltk.tokenize import TweetTokenizer
 from analyzer import Analyzer
 from dict import Dictionary
+import xlsxwriter as xl
 
 def main():
 
@@ -22,16 +23,30 @@ def main():
     
     # make the counters for each dictionary
     count1, count2, count3 = 0, 0, 0
-    path = '/home/ubuntu/workspace/text_assessment/samples'
-    print 'File ID' + '\t\t\t' + 'Easy' + '\t' + 'Medium' + '\t' + 'Advanced'
+    path = '/home/ubuntu/workspace/text_assessment/extDocs'
+    #print 'File ID' + '\t\t\t' + 'Easy' + '\t' + 'Medium' + '\t' + 'Advanced'
+    workbook = xl.Workbook('results.xlsx')
+    worksheet = workbook.add_worksheet()
+    worksheet.write('A1', 'FILE ID')
+    worksheet.write('B1', 'EASY')
+    worksheet.write('C1', 'MEDIUM')
+    worksheet.write('D1', 'ADVANCED')
+    worksheet.write('E1', 'NUMBER OF WORDS')
+    worksheet.write('F1', 'NUMBER OF SENTENCES')
+    worksheet.write('G1', 'NUMBER OF COMPLEX WORDS')
+    worksheet.write('H1', 'NUMBER OF UNIQUE WORDS')
     
-    # get each file from the folder and analyze 
+    # get each file from the folder and analyze
+    i = 1
+    
     for filename in os.listdir(path):
-        essay = os.path.join("/home/ubuntu/workspace/text_assessment/samples", filename)
+        essay = os.path.join("/home/ubuntu/workspace/text_assessment/extDocs", filename)
         # initialize the object
         analyzer = Analyzer(essay)
         # get the whole text in the form of token put into the list
         tokens = analyzer.return_tokens(essay)
+        twd = 0
+        count1, count2, count3 = 0, 0, 0
         for token in tokens:
            if token not in string.punctuation:
                if dictionary.check(token) == 1: # function returns 1 if the word is in the 'easy' list
@@ -45,9 +60,18 @@ def main():
         
         # twd stands for "total words detected"
         twd = count1 + count2 + count3
+        worksheet.write(i, 0, filename)
+        worksheet.write(i,1, float("{0:.2f}".format(count1*100.0/twd)))
+        worksheet.write(i,2, float("{0:.2f}".format(count2*100.0/twd)))
+        worksheet.write(i,3, float("{0:.2f}".format(count3*100.0/twd)))
+        worksheet.write(i,4, analyzer.word_count())
+        worksheet.write(i,5, analyzer.number_of_sentences())
+        worksheet.write(i,6, analyzer.complex_words())
+        worksheet.write(i,7, analyzer.unique_word_count())
+        i += 1
         # print the result in so that it aligns like a table
-        print (filename + "\t\t" + "{0:.2f}".format(count1*100.0/twd) + "%" + "\t" + 
-        "{0:.2f}".format(count2*100.0/twd) + "%" + "\t" + "{0:.2f}".format(count3*100.0/twd) + "%")
-
+        #print (filename + "\t\t" + "{0:.2f}".format(count1*100.0/twd) + "%" + "\t" + 
+        #"{0:.2f}".format(count2*100.0/twd) + "%" + "\t" + "{0:.2f}".format(count3*100.0/twd) + "%")
+    workbook.close()
 if __name__ == "__main__":
     main()
