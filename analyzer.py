@@ -1,7 +1,6 @@
 import nltk
 from nltk.tokenize import TweetTokenizer
 import string
-import grammar_check
 
 
 class Analyzer():
@@ -22,12 +21,6 @@ class Analyzer():
                                 self.paper = self.essay[0:i-1]
                                 break
         tokens = tokenizer.tokenize(self.paper) # divide the string into words(tokens) and save as a "list"git
-    def grammar(self, essay):
-        with open(essay, 'r') as text:
-            self.essay1 = text.read()
-        tool = grammar_check.LanguageTool('en-GB')
-        matches = tool.check(self.essay1)
-        print(grammar_check.correct(self.essay1, matches))
 
     def word_count(self): # basically counts the number of tokens except the punctuation symbols
         count = 0
@@ -153,17 +146,17 @@ class Analyzer():
                 qualifier += 1
             else:
                 unrecognized += 1
-        print 'Adjectives: ', "{0:.2f}".format((adjective/total_words)*100.0), '%'
-        print 'Adverbs: ', "{0:.2f}".format((adverb/total_words)*100.0), '%'
-        print 'Nouns: ', "{0:.2f}".format((noun/total_words)*100.0), '%'
-        print 'Verbs: ', "{0:.2f}".format((verb/total_words)*100.0), '%'
-        print 'Pronouns: ', "{0:.2f}".format((pronoun/total_words)*100.0), '%'
-        print 'Conjunctions: ', "{0:.2f}".format((conjuction/total_words)*100.0), '%'
-        print 'Determiners: ', "{0:.2f}".format((determiner/total_words)*100.0), '%'
-        print 'Prepositions: ', "{0:.2f}".format((preposition/total_words)*100.0), '%'
-        print 'Qualifiers: ', "{0:.2f}".format((qualifier/total_words)*100.0), '%'
-        print 'Interjections: ', "{0:.2f}".format((interjection/total_words)*100.0), '%'
-        print 'Unrecognized: ', "{0:.2f}".format((unrecognized/total_words)*100.0), '%'
+        print ('Adjectives: ', "{0:.2f}".format((adjective/total_words)*100.0), '%')
+        print ('Adverbs: ', "{0:.2f}".format((adverb/total_words)*100.0), '%')
+        print ('Nouns: ', "{0:.2f}".format((noun/total_words)*100.0), '%')
+        print ('Verbs: ', "{0:.2f}".format((verb/total_words)*100.0), '%')
+        print ('Pronouns: ', "{0:.2f}".format((pronoun/total_words)*100.0), '%')
+        print ('Conjunctions: ', "{0:.2f}".format((conjuction/total_words)*100.0), '%')
+        print ('Determiners: ', "{0:.2f}".format((determiner/total_words)*100.0), '%')
+        print ('Prepositions: ', "{0:.2f}".format((preposition/total_words)*100.0), '%')
+        print ('Qualifiers: ', "{0:.2f}".format((qualifier/total_words)*100.0), '%')
+        print ('Interjections: ', "{0:.2f}".format((interjection/total_words)*100.0), '%')
+        print ('Unrecognized: ', "{0:.2f}".format((unrecognized/total_words)*100.0), '%')
 
 class Dictionary():
 

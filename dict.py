@@ -14,15 +14,15 @@ class Dictionary:
         # load the first dictionary
         for word in file1:
             self.words1.add(word.rstrip("\r\n"))
-        file.close(file1)
+        file1.close()
         # load the second dictionary
         for word in file2:
             self.words2.add(word.rstrip("\r\n"))
-        file.close(file1)
+        file2.close()
         # load the third dictionary
         for word in file3:
             self.words3.add(word.rstrip("\r\n"))
-        file.close(file3)
+        file3.close()
         return True
 
     # check if the word is in the sets

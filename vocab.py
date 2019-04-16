@@ -1,5 +1,7 @@
 import sys, nltk, os, string
 from nltk.tokenize import TweetTokenizer
+
+# these classes should be in the same folder
 from analyzer import Analyzer
 from dict import Dictionary
 import xlsxwriter as xl
@@ -9,9 +11,9 @@ def main():
     # Our program uses Victoria University of Wellington's range software vocabulary list
     # For further information on that, please visit and download it at http://www.victoria.ac.nz/lals/resources/range
     # establish the paths for the dictionaries
-    dict1 = os.path.join("/home/ubuntu/workspace/text_assessment/dicts", "gsl_1st.txt")
-    dict2 = os.path.join("/home/ubuntu/workspace/text_assessment/dicts", "gsl_2nd.txt")
-    dict3 = os.path.join("/home/ubuntu/workspace/text_assessment/dicts", "gsl_3rd.txt")
+    dict1 = os.path.join("/Users/mirzakhalov/Documents/PersonalProjects/Text-Assessment/dicts", "gsl_1st.txt")
+    dict2 = os.path.join("/Users/mirzakhalov/Documents/PersonalProjects/Text-Assessment/dicts", "gsl_2nd.txt")
+    dict3 = os.path.join("/Users/mirzakhalov/Documents/PersonalProjects/Text-Assessment/dicts", "gsl_3rd.txt")
     if not dict1 or not dict2 or not dict3:
         sys.exit("Could not find the path")
     
@@ -23,7 +25,7 @@ def main():
     
     # make the counters for each dictionary
     count1, count2, count3 = 0, 0, 0
-    path = '/home/ubuntu/workspace/text_assessment/extDocs'
+    path = '/Users/mirzakhalov/Documents/PersonalProjects/Text-Assessment/samples'
     #print 'File ID' + '\t\t\t' + 'Easy' + '\t' + 'Medium' + '\t' + 'Advanced'
     workbook = xl.Workbook('results.xlsx')
     worksheet = workbook.add_worksheet()
@@ -40,7 +42,8 @@ def main():
     i = 1
     
     for filename in os.listdir(path):
-        essay = os.path.join("/home/ubuntu/workspace/text_assessment/extDocs", filename)
+        print("here")
+        essay = os.path.join("/Users/mirzakhalov/Documents/PersonalProjects/Text-Assessment/samples", filename)
         # initialize the object
         analyzer = Analyzer(essay)
         # get the whole text in the form of token put into the list
@@ -60,10 +63,11 @@ def main():
         
         # twd stands for "total words detected"
         twd = count1 + count2 + count3
+        
         worksheet.write(i, 0, filename)
-        worksheet.write(i,1, float("{0:.2f}".format(count1*100.0/twd)))
-        worksheet.write(i,2, float("{0:.2f}".format(count2*100.0/twd)))
-        worksheet.write(i,3, float("{0:.2f}".format(count3*100.0/twd)))
+        worksheet.write(i,1, float("{0:.2f}".format(count1*100.0/(twd+1))))
+        worksheet.write(i,2, float("{0:.2f}".format(count2*100.0/(twd+1))))
+        worksheet.write(i,3, float("{0:.2f}".format(count3*100.0/(twd+1))))
         worksheet.write(i,4, analyzer.word_count())
         worksheet.write(i,5, analyzer.number_of_sentences())
         worksheet.write(i,6, analyzer.complex_words())
